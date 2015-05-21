@@ -1,5 +1,11 @@
 # Class model for users
 class User < ActiveRecord::Base
+  # Include default devise modules. Others available are:
+  # :lockable, :timeoutable and :omniauthable
+  devise :database_authenticatable, :registerable,
+         :recoverable, :rememberable, :trackable, :validatable, :confirmable,
+         :omniauthable, omniauth_providers: [:facebook, :google_oauth2]
+
   belongs_to :country
   has_many :received_messages, -> { where sent: true },
            foreign_key: :receiver_id, class_name: 'Message'

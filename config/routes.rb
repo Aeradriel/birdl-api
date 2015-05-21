@@ -1,4 +1,5 @@
 Rails.application.routes.draw do
+  devise_for :users
   post '/users/check_pwd' => 'users#email_pwd?'
 
   # The priority is based upon order of creation: first created -> highest priority.
