@@ -13,6 +13,7 @@ class API < Grape::API
     end
   end
 
-  mount UserAPI
   mount AuthAPI
+  mount UserAPI
+  mount EventAPI
 end
