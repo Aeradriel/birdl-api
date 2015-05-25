@@ -6,7 +6,7 @@ class AuthAPI < Grape::API
 
     if u && u.valid_password?(params[:password])
       token = ApiKey.create!(user_id: u.id)
-      headers['Access-Token'] = token.access_token
+      header('Access-Token', token.access_token)
       send_response('Authentication succeed')
     else
       error!('Authentication failed', 401)
