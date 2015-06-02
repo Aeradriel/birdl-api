@@ -12,4 +12,8 @@ class EventAPI < Grape::API
   get '/events/future', each_serializer: EventSerializer, root: 'events' do
     Event.where('date > ?', Time.now)
   end
+
+  get '/events/:id', serializer: EventSerializer do
+    Event.where(id: params[:id]).first
+  end
 end
