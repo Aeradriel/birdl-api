@@ -1,7 +1,7 @@
 source 'https://rubygems.org'
 
 gem 'rails', '4.2.0'
-gem 'grape', '0.9'
+gem 'grape'
 gem 'pg'
 gem 'devise'
 gem 'omniauth'
