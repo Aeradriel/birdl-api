@@ -9,11 +9,15 @@ class API < Grape::API
 
   before do
     unless no_auth_needed?
-      authenticate!
+      #authenticate!
     end
   end
 
   mount AuthAPI
   mount UserAPI
   mount EventAPI
+
+  add_swagger_documentation base_path: '',
+                            api_version: '1.0',
+                            hide_documentation_path: true
 end

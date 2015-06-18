@@ -14,6 +14,9 @@ gem 'jquery-rails'
 gem 'turbolinks'
 gem 'jbuilder', '~> 2.0'
 gem 'sdoc', '~> 0.4.0', group: :doc
+gem 'grape-entity'
+gem 'grape-swagger'
+gem 'grape-swagger-rails'
 
 group :development, :test do
   gem 'byebug'
