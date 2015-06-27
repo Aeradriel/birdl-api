@@ -9,7 +9,7 @@ class API < Grape::API
 
   before do
     unless no_auth_needed?
-      #authenticate!
+      authenticate!
     end
   end
 
