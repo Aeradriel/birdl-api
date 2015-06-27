@@ -1,5 +1,7 @@
 # User API
 class UserAPI < Grape::API
+  include AuthHelper
+
   desc 'Register a user'
   post '/register', serializer: UserSerializer do
     error!('Missing param "user"', 400) if params[:user].nil?
@@ -20,7 +22,8 @@ class UserAPI < Grape::API
 
   desc 'Update current user'
   post '/me', serializer: UserSerializer do
-    error!('Missing param "user"', 400) if params[:user].nil?
+    error!('Missing param "user"', 400) unless params[:user]
+    error!('Wrong password', 401) unless check_user_pwd(params[:password])
     user_params = JSON.parse(params[:user])
     user_params.delete('email') if @current_user.email == user_params['email']
     puts user_params

@@ -15,4 +15,9 @@ module AuthHelper
       false
     end
   end
+
+  def check_user_pwd(password)
+    return true if @current_user.valid_password?(password)
+    false
+  end
 end
