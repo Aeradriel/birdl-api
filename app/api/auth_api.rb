@@ -12,4 +12,8 @@ class AuthAPI < Grape::API
       error!('Authentication failed', 401)
     end
   end
+
+  desc 'Check if token is valid'
+  get '/check_token' do
+  end
 end
