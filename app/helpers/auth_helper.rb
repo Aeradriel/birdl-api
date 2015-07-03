@@ -20,4 +20,13 @@ module AuthHelper
     return true if @current_user.valid_password?(password)
     false
   end
+
+  def filter_events(events)
+    ret = events
+    ret = events.where('lower(name) LIKE ?', "%#{params[:name].downcase}%") if params[:name]
+    ret = ret.reject { |e| e.remaining_slots < params[:remaining_slots].to_i } if params[:remaining_slots]
+    ret = ret.where(type: params[:event_type]) if
+        params[:event_type]
+    ret
+  end
 end

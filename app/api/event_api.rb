@@ -1,18 +1,20 @@
 # Class that handle API endpoints for events
 class EventAPI < Grape::API
-    desc 'Get all events'
+  include EventHelper
+
+  desc 'Get all events'
   get '/events', each_serializer: EventSerializer do
-    Event.all
+    filter_events (Event.all)
   end
 
   desc 'Get past events'
   get '/events/past', each_serializer: EventSerializer, root: 'events' do
-    Event.where('date <= ?', Time.now)
+    filter_events(Event.where('date <= ?', Time.now))
   end
 
   desc 'Get future events'
   get '/events/future', each_serializer: EventSerializer, root: 'events' do
-    Event.where('date > ?', Time.now)
+    filter_events(Event.where('date > ?', Time.now))
   end
 
   desc 'Get an event details'
