@@ -19,6 +19,7 @@ class Event < ActiveRecord::Base
 
   validates :name, presence: true
   validates :type, presence: true
+  validates :desc, presence: true
   validates :min_slots, presence: true
   validates :max_slots, presence: true
   validates :date, presence: true
