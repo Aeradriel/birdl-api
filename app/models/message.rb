@@ -8,7 +8,6 @@ class Message < ActiveRecord::Base
 
   validates :sender, presence: true, allow_nil: false
   validates :sender, presence: true, allow_nil: false
-  validates :object, presence: true, allow_nil: false, allow_blank: false
   validates :content, presence: true, allow_nil: false, allow_blank: false
 
   def draft?
@@ -18,6 +17,5 @@ class Message < ActiveRecord::Base
   def send_message
     self.sent = true
     self.sent_at = Time.now
-    # TODO: Notify receiver
   end
 end

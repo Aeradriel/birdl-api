@@ -17,6 +17,7 @@ class API < Grape::API
   mount UserAPI
   mount EventAPI
   mount CountryAPI
+  mount MessageAPI
 
   add_swagger_documentation base_path: '',
                             api_version: '1.0',

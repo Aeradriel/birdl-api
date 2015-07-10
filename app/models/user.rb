@@ -7,9 +7,9 @@ class User < ActiveRecord::Base
          :omniauthable, omniauth_providers: [:facebook, :google_oauth2]
 
   belongs_to :country
-  has_many :received_messages, -> { where sent: true },
+  has_many :received_messages,
            foreign_key: :receiver_id, class_name: 'Message'
-  has_many :sent_messages, -> { where sent: true },
+  has_many :sent_messages,
            foreign_key: :sender_id, class_name: 'Message'
   has_many :draft_messages, -> { where sent: false },
            foreign_key: :sender_id, class_name: 'Message'
