@@ -32,4 +32,21 @@ class MessageAPI < Grape::API
     end
     relations.uniq
   end
+
+  desc 'Create a message'
+  post 'messages/new' do
+    error!('Missing sender_id parameter', 400) unless params[:sender_id]
+    error!('Missing receiver_id parameter', 400) unless params[:receiver_id]
+    error!('Missing content parameter', 400) unless params[:content]
+    error!("Unable to retrieve user with id #{params[:sender_id]}", 400) unless User.where(id: params[:sender_id]).count > 0
+    error!("Unable to retrieve user with id #{params[:receiver_id]}", 400) unless User.where(id: params[:receiver_id]).count > 0
+    m = Message.new(sender_id: params[:sender_id],
+                    receiver_id: params[:receiver_id],
+                    content: params[:content])
+    if m.save
+      m
+    else
+      error!(m.errors.messages, 400)
+    end
+  end
 end
