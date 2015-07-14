@@ -4,8 +4,9 @@ class MessageAPI < Grape::API
   get '/messages', each_serializer: MessageSerializer do
     error!('Missing param "relation"', 400) if params[:relation].nil?
     messages = @current_user.received_messages.where(
-        receiver_id: params[:relation].to_i) +
+        sender_id: params[:relation].to_i) +
         @current_user.sent_messages.where(receiver_id: params[:relation].to_i)
+    messages.sort! { |a, b| a.created_at <=> b.created_at }
     messages.uniq
   end
 
