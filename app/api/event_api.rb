@@ -21,4 +21,32 @@ class EventAPI < Grape::API
   get '/events/:id', serializer: EventSerializer do
     Event.where(id: params[:id]).first
   end
+
+  desc 'Check if event includes user'
+  get '/event/check' do
+    error!('Missing param "event_id"', 400) unless params[:event_id]
+    error!('Missing param "user_id"', 400) unless params[:user_id]
+    event = Event.where(id: params[:event_id].to_i).first
+    error!('Wrong event id', 400) unless event
+    user = User.where(id: params[:user_id].to_i).first
+    error!('Wrong user id', 400) unless user
+    event.users.include?(user)
+  end
+
+  desc 'Register current user to an event'
+  post '/events/register/:id' do
+    error!('Missing param "id"', 400) unless params[:id]
+    event = Event.where(id: params[:id].to_i)
+    error!('Wrong event id', 400) unless event
+    if can_register?(event, @current_user)
+      event.users << @current_user
+      if event.save
+        event
+      else
+        error!(event.errors.messages, 400) unless event
+      end
+    else
+      error!('You cannot register to this event', 400)
+    end
+  end
 end

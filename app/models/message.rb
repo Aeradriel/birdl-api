@@ -6,7 +6,7 @@ class Message < ActiveRecord::Base
   scope :unread, -> { where(read: false) }
   scope :read, -> { where(read: true) }
 
-  validates :sender, presence: true, allow_nil: false
+  validates :receiver, presence: true, allow_nil: false
   validates :sender, presence: true, allow_nil: false
   validates :content, presence: true, allow_nil: false, allow_blank: false
 

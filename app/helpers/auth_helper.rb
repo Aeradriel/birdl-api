@@ -29,4 +29,11 @@ module AuthHelper
         params[:event_type]
     ret
   end
+
+  def can_register?(e, u)
+    return false if Time.now > e.date
+    return false if e.users.include?(u)
+    return false if e.max_slots == e.users.count
+    true
+  end
 end
