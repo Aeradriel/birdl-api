@@ -11,25 +11,24 @@ class EventAPI < Grape::API
   get '/events/past', each_serializer: EventSerializer, root: 'events' do
     filter_events(Event.where('date <= ?', Time.now))
   end
-
+g
   desc 'Get future events'
   get '/events/future', each_serializer: EventSerializer, root: 'events' do
     filter_events(Event.where('date > ?', Time.now))
   end
 
   desc 'Get an event details'
-  get '/events/:id', serializer: EventSerializer do
+  get '/event/:id', serializer: EventSerializer do
     Event.where(id: params[:id]).first
   end
 
   desc 'Check if event includes user'
-  get '/event/check' do
+  get '/events/check' do
     error!('Missing param "event_id"', 400) unless params[:event_id]
-    error!('Missing param "user_id"', 400) unless params[:user_id]
     event = Event.where(id: params[:event_id].to_i).first
     error!('Wrong event id', 400) unless event
-    user = User.where(id: params[:user_id].to_i).first
-    error!('Wrong user id', 400) unless user
+    user = User.where(id: params[:user_id].to_i).first if params[:user_id]
+    user ||= @current_user
     event.users.include?(user)
   end
 
