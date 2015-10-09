@@ -27,7 +27,7 @@ class UserAPI < Grape::API
     user_params = JSON.parse(params[:user])
     user_params.delete('email') if @current_user.email == user_params['email']
     puts user_params
-    @current_user.update_attributes(user_params)
+    @current_user.assign_attributes(user_params)
     @current_user.birthdate = Date.strptime(user_params['birthdate'], '%Y/%m/%d')
     if @current_user.save
       @current_user
