@@ -47,8 +47,8 @@ class EventAPI < Grape::API
                   min_slots: params[:min_slots].to_i, max_slots: params[:max_slots].to_i,
                   language: params[:language])
     begin
-      e.date = Date.strptime(params['date'], '%Y/%m/%d')
-      e.end = Date.strptime(params['end'], '%Y/%m/%d')
+      e.date = Date.strptime(params[:date], '%Y/%m/%d')
+      e.end = Date.strptime(params[:end], '%Y/%m/%d')
     rescue ArgumentError => err
       error!(err.to_s, 400)
     end
