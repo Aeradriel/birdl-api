@@ -40,7 +40,7 @@ class EventAPI < Grape::API
     error!('Missing param "min_slots"', 400) unless params[:min_slots]
     error!('Missing param "max_slots"', 400) unless params[:max_slots]
     error!('Missing param "date"', 400) unless params[:date]
-    error!('Missing param "ending_date"', 400) unless params[:ending_date]
+    error!('Missing param "end"', 400) unless params[:ending_date]
     error!('Invalid event type', 400) unless Event.type.include?(params[:type])
 
     e = Event.new(name: params[:name], desc: params[:desc], type: params[:type],
@@ -48,7 +48,7 @@ class EventAPI < Grape::API
                   language: params[:language])
     begin
       e.date = Date.strptime(params['date'], '%Y/%m/%d')
-      e.ending_date = Date.strptime(params['ending_date'], '%Y/%m/%d')
+      e.end = Date.strptime(params['end'], '%Y/%m/%d')
     rescue ArgumentError => err
       error!(err.to_s, 400)
     end
