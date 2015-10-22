@@ -45,7 +45,7 @@ class EventAPI < Grape::API
 
     e = Event.new(name: params[:name], desc: params[:desc], type: params[:type],
                   min_slots: params[:min_slots].to_i, max_slots: params[:max_slots].to_i,
-                  language: params[:language])
+                  language: params[:language], owner_id: @current_user.id)
     begin
       e.date = Date.strptime(params[:date], '%Y/%m/%d')
       e.end = Date.strptime(params[:end], '%Y/%m/%d')
