@@ -1,5 +1,6 @@
 routes_without_authentication: [
   '/api/login',
   '/api/register',
+  '/api/countries',
   '/api/swagger_doc'
 ]
