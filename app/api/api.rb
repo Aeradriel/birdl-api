@@ -18,6 +18,7 @@ class API < Grape::API
   mount EventAPI
   mount CountryAPI
   mount MessageAPI
+  mount NotificationAPI
 
   add_swagger_documentation base_path: '',
                             api_version: '1.0',

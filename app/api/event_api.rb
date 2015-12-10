@@ -67,6 +67,7 @@ class EventAPI < Grape::API
     if can_register?(event, @current_user)
       event.users << @current_user
       if event.save
+        Notification.create(user_id: event.owner.id, text: "#{@current_user.name} has joined your event \"#{event.name}\"")
         event
       else
         error!(event.errors.messages, 400) unless event

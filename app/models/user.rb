@@ -29,6 +29,7 @@ class User < ActiveRecord::Base
   has_many :inverse_relations, class_name: 'Relation', foreign_key: :friend_id
   has_many :inverse_friends, through: :inverse_relations, source: :user
 
+  has_many :notifications
 
   scope :admins, -> { where(admin: true) }
   scope :normals, -> { where(admin: false) }
