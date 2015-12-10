@@ -11,7 +11,7 @@ class UserAPI < Grape::API
     if u.save
       u
     else
-      error!(u.errors.messages, 400)
+      error!(u.errors.messages, 500)
     end
   end
 
@@ -23,6 +23,33 @@ class UserAPI < Grape::API
   desc 'Get user friends'
   get '/user/relations', each_serializer: UserSerializer do
     @current_user.all_friends
+  end
+
+  desc 'Add user to as friend'
+  post '/user/relations', each_serializer: UserSerializer do
+    error!('Missing param "user_id"', 400) if params[:user_id].nil?
+    error!('Wrong param "user"', 400) unless User.where(id: params[:user_id].to_i).first
+    @current_user.friends << User.where(id: params[:user_id].to_i).first
+    if @current_user.save
+      @current_user.all_friends
+    else
+      error!(@current_user.errors.messages, 500)
+    end
+  end
+
+  desc 'Delete a user from friends'
+  delete '/user/relations', each_serializer: UserSerializer do
+    error!('Missing param "user_id"', 400) if params[:user_id].nil?
+    user = User.where(id: params[:user_id].to_i).first
+    error!('Wrong param "user"', 400) unless user
+    rel = Relation.where(user_id: @current_user.id, friend_id: user.id).first
+    rel ||= Relation.where(user_id: user.id, friend_id: @current_user.id).first
+    error!('No such relation', 400) unless rel
+    if rel.destroy
+      @current_user.all_friends
+    else
+      error!(rel.errors.messages, 500)
+    end
   end
 
   desc 'Update current user'
@@ -37,7 +64,7 @@ class UserAPI < Grape::API
     if @current_user.save
       @current_user
     else
-      error!(@current_user.errors.messages, 400)
+      error!(@current_user.errors.messages, 500)
     end
   end
 end
