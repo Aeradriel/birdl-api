@@ -23,6 +23,13 @@ class User < ActiveRecord::Base
   has_many :events, through: :participations
   has_many :addresses
 
+  has_many :relations
+  has_many :friends, through: :relations
+
+  has_many :inverse_relations, class_name: 'Relation', foreign_key: :friend_id
+  has_many :inverse_friends, through: :inverse_relations, source: :user
+
+
   scope :admins, -> { where(admin: true) }
   scope :normals, -> { where(admin: false) }
 
@@ -34,6 +41,10 @@ class User < ActiveRecord::Base
   def gender_valid?
     false unless gender == 1 || gender == 0
     true
+  end
+
+  def all_friends
+    return friends + inverse_friends
   end
 
   def name

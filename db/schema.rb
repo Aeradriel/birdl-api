@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20150523101627) do
+ActiveRecord::Schema.define(version: 20151210161430) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -55,6 +55,7 @@ ActiveRecord::Schema.define(version: 20150523101627) do
     t.string   "icon_path",   limit: 255
     t.datetime "created_at"
     t.datetime "updated_at"
+    t.string   "identifier",  limit: 255
   end
 
   create_table "countries", force: :cascade do |t|
@@ -106,6 +107,30 @@ ActiveRecord::Schema.define(version: 20150523101627) do
     t.integer "event_id"
   end
 
+  create_table "ratings", force: :cascade do |t|
+    t.integer  "giver_id"
+    t.integer  "user_id"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+    t.float    "value"
+    t.text     "comment"
+    t.integer  "event_id"
+  end
+
+  add_index "ratings", ["event_id"], name: "index_ratings_on_event_id", using: :btree
+  add_index "ratings", ["giver_id"], name: "index_ratings_on_giver_id", using: :btree
+  add_index "ratings", ["user_id"], name: "index_ratings_on_user_id", using: :btree
+
+  create_table "relations", force: :cascade do |t|
+    t.integer  "user_id"
+    t.integer  "friend_id"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
+
+  add_index "relations", ["friend_id"], name: "index_relations_on_friend_id", using: :btree
+  add_index "relations", ["user_id"], name: "index_relations_on_user_id", using: :btree
+
   create_table "user_ratings", force: :cascade do |t|
     t.integer  "user_id"
     t.integer  "giver_id"
@@ -143,6 +168,7 @@ ActiveRecord::Schema.define(version: 20150523101627) do
     t.string   "locale",                 limit: 255
     t.string   "provider",               limit: 255
     t.string   "uid",                    limit: 255
+    t.boolean  "fb_acc",                             default: false
   end
 
   add_index "users", ["confirmation_token"], name: "index_users_on_confirmation_token", unique: true, using: :btree

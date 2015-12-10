@@ -20,6 +20,11 @@ class UserAPI < Grape::API
     @current_user
   end
 
+  desc 'Get user friends'
+  get '/user/relations', each_serializer: UserSerializer do
+    @current_user.all_friends
+  end
+
   desc 'Update current user'
   post '/me', serializer: UserSerializer do
     error!('Missing param "user"', 400) unless params[:user]
