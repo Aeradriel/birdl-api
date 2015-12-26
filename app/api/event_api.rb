@@ -76,4 +76,22 @@ class EventAPI < Grape::API
       error!('You cannot register to this event', 400)
     end
   end
+
+  desc 'Remove current user from event'
+  post '/events/unregister/:id' do
+    error!('Missing param "id"', 400) unless params[:id]
+    event = Event.where(id: params[:id].to_i).first
+    error!('Wrong event id', 400) unless event
+    if event.users.include?(@current_user)
+      event.users = event.users.reject { |u| u.id == @current_user.id }
+      if event.save
+        Notification.create(user_id: event.owner.id, text: "#{@current_user.name} has left your event \"#{event.name}\"")
+        event
+      else
+        error!(event.errors.messages, 400) unless event
+      end
+    else
+      error!('You are not part of this event', 400)
+    end
+  end
 end
