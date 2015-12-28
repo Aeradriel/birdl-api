@@ -18,17 +18,21 @@ class EventAPI < Grape::API
   end
 
   desc 'Get an event details'
-  get '/events/:id', serializer: EventSerializer do
-    Event.where(id: params[:id]).first
+  get '/events', serializer: EventSerializer do
+    Event.where(id: params[:event_id]).first
   end
 
   desc 'Check if event includes user'
   get '/events/check' do
+    puts "lol"
     error!('Missing param "event_id"', 400) unless params[:event_id]
     event = Event.where(id: params[:event_id].to_i).first
+    puts "lol2"
     error!('Wrong event id', 400) unless event
     user = User.where(id: params[:user_id].to_i).first if params[:user_id]
+    puts "lol3"
     user ||= @current_user
+    puts "DEBUG: #{event.id}/#{user.id}"
     event.users.include?(user)
   end
 
