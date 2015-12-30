@@ -59,6 +59,18 @@ class EventAPI < Grape::API
     end
   end
 
+  desc 'Deletes an event'
+  delete '/events' do
+    error!('Missing param "id"', 400) unless params[:id]
+    event = Event.where(id: params[:id].to_i).first
+    error!('Wrong event id', 400) unless event
+    if event.delete
+      'ok'
+    else
+      error!(event.errors.messages, 400)
+    end
+  end
+
   desc 'Register current user to an event'
   post '/events/register/:id' do
     error!('Missing param "id"', 400) unless params[:id]
@@ -70,7 +82,7 @@ class EventAPI < Grape::API
         Notification.create(user_id: event.owner.id, text: "#{@current_user.name} has joined your event \"#{event.name}\"")
         event
       else
-        error!(event.errors.messages, 400) unless event
+        error!(event.errors.messages, 400)
       end
     else
       error!('You cannot register to this event', 400)
@@ -88,7 +100,7 @@ class EventAPI < Grape::API
         Notification.create(user_id: event.owner.id, text: "#{@current_user.name} has left your event \"#{event.name}\"")
         event
       else
-        error!(event.errors.messages, 400) unless event
+        error!(event.errors.messages, 400)
       end
     else
       error!('You are not part of this event', 400)
