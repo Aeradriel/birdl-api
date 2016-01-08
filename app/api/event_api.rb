@@ -29,7 +29,7 @@ class EventAPI < Grape::API
     error!('Wrong event id', 400) unless event
     user = User.where(id: params[:user_id].to_i).first if params[:user_id]
     user ||= @current_user
-    event.users.include?(user)
+    event.users.include?(user).to_s
   end
 
   desc 'Creates an event'
