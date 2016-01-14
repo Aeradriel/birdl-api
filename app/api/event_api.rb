@@ -106,4 +106,22 @@ class EventAPI < Grape::API
       error!('You are not part of this event', 400)
     end
   end
+
+  desc 'Validate or not the presence of a user for an event'
+  post '/events/validate_presence/' do
+    error!('Missing param "user_id"', 400) unless params[:user_id]
+    error!('Missing param "event_id"', 400) unless params[:event_id]
+    error!('Missing param "was_there"', 400) unless params[:was_there]
+    event = Event.where(id: params[:event_id].to_i).first
+    error!('Wrong event id', 400) unless event
+    user = User.where(id: params[:user_id].to_i).first
+    error!('Wrong user id', 400) unless user
+    error!('You or the other user is not part of this event', 400) unless event.users.include?(@current_user) && event.users.include?(user)
+    participation = Participation.where(user_id: user.id, event_id: event.id).first
+    if participation.update(was_there: params[:was_there].to_i)
+      participation
+    else
+      error!(participation.errors.messages, 400)
+    end
+  end
 end

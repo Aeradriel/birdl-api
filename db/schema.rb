@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20151210200855) do
+ActiveRecord::Schema.define(version: 20160114160505) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -116,6 +116,7 @@ ActiveRecord::Schema.define(version: 20151210200855) do
   create_table "participations", force: :cascade do |t|
     t.integer "user_id"
     t.integer "event_id"
+    t.boolean "was_there"
   end
 
   create_table "ratings", force: :cascade do |t|
