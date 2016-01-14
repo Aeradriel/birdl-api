@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20160114160505) do
+ActiveRecord::Schema.define(version: 20160114163719) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -149,8 +149,10 @@ ActiveRecord::Schema.define(version: 20160114160505) do
     t.integer  "value"
     t.datetime "created_at"
     t.datetime "updated_at"
+    t.integer  "event_id"
   end
 
+  add_index "user_ratings", ["event_id"], name: "index_user_ratings_on_event_id", using: :btree
   add_index "user_ratings", ["giver_id"], name: "index_user_ratings_on_giver_id", using: :btree
   add_index "user_ratings", ["user_id"], name: "index_user_ratings_on_user_id", using: :btree
 
@@ -188,4 +190,5 @@ ActiveRecord::Schema.define(version: 20160114160505) do
   add_index "users", ["reset_password_token"], name: "index_users_on_reset_password_token", unique: true, using: :btree
 
   add_foreign_key "notifications", "users"
+  add_foreign_key "user_ratings", "events"
 end

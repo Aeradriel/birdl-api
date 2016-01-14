@@ -68,4 +68,23 @@ class UserAPI < Grape::API
       error!(@current_user.errors.messages, 500)
     end
   end
+
+  desc 'Rate user'
+  post '/user/rate' do
+    error!('Missing param "user_id"', 400) unless params[:user_id]
+    error!('Missing param "event_id"', 400) unless params[:event_id]
+    error!('Missing param "value"', 400) unless params[:value]
+    user = User.where(id: params[:user_id].to_i).first
+    error!('Wrong param "user_id"', 400) unless user
+    event = Event.where(id: params[:event_id].to_i).first
+    error!('Wrong param "event_id"', 400) unless event
+    value = params[:value].to_i
+    error!('You have already rated this user for this event', 400) if UserRating.where(event_id: event.id, giver_id: @current_user.id, user_id: user.id).first
+    r = UserRating.new(event_id: event.id, giver_id: @current_user.id, user_id: user.id, value: value > 5 ? 5 : value)
+    if r.save
+      r
+    else
+      r.errors.messages
+    end
+  end
 end
