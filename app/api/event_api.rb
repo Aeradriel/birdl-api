@@ -134,6 +134,7 @@ class EventAPI < Grape::API
     user = User.where(id: params[:user_id].to_i).first
     error!('Wrong user id', 400) unless user
     participation = Participation.where(user_id: user.id, event_id: event.id).first
+    error!('User is not in guests list', 400) unless participation
     participation.was_there
   end
 end
