@@ -2,7 +2,7 @@
 class NotificationAPI < Grape::API
   desc 'Get notifications of the user'
   get '/notifications' do
-    @current_user.notifications
+    @current_user.notifications.order(created_at: :desc)
   end
 
   put '/notifications' do
