@@ -79,7 +79,7 @@ class EventAPI < Grape::API
     if can_register?(event, @current_user)
       event.users << @current_user
       if event.save
-        Notification.create(user_id: event.owner.id, text: "#{@current_user.name} has joined your event \"#{event.name}\"")
+        Notification.create(user_id: @event.owner.id, subject:'Nouveau participant !', text: "#{@current_user.name} a rejoint votre événement \"#{@event.name}\"")
         event
       else
         error!(event.errors.messages, 400)
@@ -97,7 +97,7 @@ class EventAPI < Grape::API
     if event.users.include?(@current_user)
       event.users = event.users.reject { |u| u.id == @current_user.id }
       if event.save
-        Notification.create(user_id: event.owner.id, text: "#{@current_user.name} has left your event \"#{event.name}\"")
+        Notification.create(user_id: event.owner.id, subject: 'Participant en moins', text: "#{@current_user.name} a quitté votre événement \"#{event.name}\"")
         event
       else
         error!(event.errors.messages, 400)

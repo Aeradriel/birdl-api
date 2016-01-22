@@ -31,7 +31,7 @@ class UserAPI < Grape::API
     error!('Wrong param "user"', 400) unless User.where(id: params[:user_id].to_i).first
     @current_user.friends << User.where(id: params[:user_id].to_i).first
     if @current_user.save
-      Notification.create(user_id: User.where(id: params[:user_id].to_i).first.id, text: "#{@current_user.name} has added you as friend")
+      Notification.create(user_id: User.where(id: params[:user_id].to_i).first.id, subject: 'Nouvelle connaissance !', text: "#{@current_user.name} vous a ajouté en temps que connaissance")
       @current_user.all_friends
     else
       error!(@current_user.errors.messages, 500)
