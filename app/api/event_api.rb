@@ -4,7 +4,7 @@ class EventAPI < Grape::API
 
   desc 'Get all events'
   get '/events', each_serializer: EventSerializer do
-    filter_events (Event.all)
+    filter_events(params[:mine].to_i ? @current_user.events : Event.all)
   end
 
   desc 'Get past events'
