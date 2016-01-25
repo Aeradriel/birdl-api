@@ -79,7 +79,7 @@ class EventAPI < Grape::API
     if can_register?(event, @current_user)
       event.users << @current_user
       if event.save
-        Notification.create(user_id: @event.owner.id, subject:'Nouveau participant !', text: "#{@current_user.name} a rejoint votre événement \"#{@event.name}\"")
+        Notification.create(user_id: event.owner.id, subject:'Nouveau participant !', text: "#{@current_user.name} a rejoint votre événement \"#{event.name}\"")
         event
       else
         error!(event.errors.messages, 400)
