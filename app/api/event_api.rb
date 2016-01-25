@@ -9,12 +9,12 @@ class EventAPI < Grape::API
 
   desc 'Get past events'
   get '/events/past', each_serializer: EventSerializer, root: 'events' do
-    filter_events(Event.where('date <= ?', Time.now))
+    filter_events(params[:mine].to_i ? @current_user.events.where('date <= ?', Time.now) : Event.where('date <= ?', Time.now))
   end
 
   desc 'Get future events'
   get '/events/future', each_serializer: EventSerializer, root: 'events' do
-    filter_events(Event.where('date > ?', Time.now))
+    filter_events(params[:mine].to_i ? @current_user.events.where('date > ?', Time.now) : Event.where('date > ?', Time.now))
   end
 
   desc 'Get an event details'
