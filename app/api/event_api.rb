@@ -41,11 +41,20 @@ class EventAPI < Grape::API
     error!('Missing param "max_slots"', 400) unless params[:max_slots]
     error!('Missing param "date"', 400) unless params[:date]
     error!('Missing param "end"', 400) unless params[:end]
+    error!('Missing param "location"', 400) unless params[:location]
     error!('Invalid event type', 400) unless Event.type.include?(params[:type])
 
     e = Event.new(name: params[:name], desc: params[:desc], type: params[:type],
                   min_slots: params[:min_slots].to_i, max_slots: params[:max_slots].to_i,
                   language: params[:language], owner_id: @current_user.id, location: params[:location])
+    if params[:image]
+      filename = "event_image_#{Time.now}"
+      tempfile = Tempfile.new('fileupload')
+      tempfile.binmode
+      tempfile.write(Base64.decode64(params[:file]))
+      e.imagePath = filename
+      ActionDispatch::Http::UploadedFile.new(:tempfile => tempfile, :filename => filename)
+    end
     begin
       e.date = Date.strptime(params[:date], '%Y/%m/%d')
       e.end = Date.strptime(params[:end], '%Y/%m/%d')
