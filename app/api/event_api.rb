@@ -47,6 +47,7 @@ class EventAPI < Grape::API
     e = Event.new(name: params[:name], desc: params[:desc], type: params[:type],
                   min_slots: params[:min_slots].to_i, max_slots: params[:max_slots].to_i,
                   language: params[:language], owner_id: @current_user.id, location: params[:location])
+    e.users << @current_user
     if params[:image]
       filename = "event_image_#{Time.now}"
       tempfile = Tempfile.new('fileupload')
