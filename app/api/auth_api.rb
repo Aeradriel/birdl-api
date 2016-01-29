@@ -2,8 +2,8 @@
 class AuthAPI < Grape::API
   desc 'Allow user to login'
   post '/login' do
+    params[:email].gsub!(' ', '+')
     u = User.where(email: params[:email]).first
-
     if u && u.valid_password?(params[:password])
       token = ApiKey.create!(user_id: u.id)
       header('Access-Token', token.access_token)
