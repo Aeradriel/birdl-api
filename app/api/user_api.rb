@@ -87,4 +87,9 @@ class UserAPI < Grape::API
       r.errors.messages
     end
   end
+
+  desc 'User badges'
+  get '/user/badges' do
+    @current_user.badges
+  end
 end
